@@ -1,12 +1,9 @@
 import React from "react"
 import ReactMde from "react-mde"
 import Showdown from "showdown"
-
-export default function Editor({ currentNote:{
-    body = ""
-}, updateNote: {
-    updateNote = () => {}
-} }) {
+import propsTypes from "prop-types"
+import "react-mde/lib/styles/css/react-mde-all.css";
+const Editor = ({ currentNote, updateNote }) => {
     const [selectedTab, setSelectedTab] = React.useState("write")
 
     const converter = new Showdown.Converter({
@@ -14,7 +11,7 @@ export default function Editor({ currentNote:{
         simplifiedAutoLink: true,
         strikethrough: true,
         tasklists: true,
-    })  
+    })
 
     return (
         <section className="pane editor">
@@ -32,3 +29,10 @@ export default function Editor({ currentNote:{
         </section>
     )
 }
+
+Editor.propTypes = {
+    currentNote: propsTypes.object.isRequired,
+    updateNote: propsTypes.func.isRequired,
+}
+
+export default Editor

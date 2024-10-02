@@ -1,16 +1,12 @@
-export default function Sidebar(props: {
-    notes: { id: string; body: string }[]
-    currentNote: { id: string; body: string }
-    setCurrentNoteId: (id: string) => void
-    newNote: () => void
-}) {
+import propsTypes from 'prop-types'
+
+const Sidebar = (props) => {
     const noteElements = props.notes.map((note, index) => (
         <div key={note.id}>
             <div
-                
-                className={`title ${
-                    note.id === props.currentNote.id ? "selected-note" : ""
-                }`}
+
+                className={`title ${note.id === props.currentNote.id ? "selected-note" : ""
+                    }`}
                 onClick={() => props.setCurrentNoteId(note.id)}
             >
                 <h4 className="text-snippet">Note {index + 1}</h4>
@@ -28,3 +24,12 @@ export default function Sidebar(props: {
         </section>
     )
 }
+
+Sidebar.propTypes = {
+    notes: propsTypes.array.isRequired,
+    currentNote: propsTypes.object.isRequired,
+    setCurrentNoteId: propsTypes.func.isRequired,
+    newNote: propsTypes.func.isRequired,
+}
+
+export default Sidebar
