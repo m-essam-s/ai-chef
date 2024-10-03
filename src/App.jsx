@@ -12,20 +12,14 @@ import "./App.css"
 
 const App = () => {
 
-    // git notes from local storage
-    /**
-     * Lazily initialize our `notes` state so it doesn't
-     * reach into localStorage on every single re-render
-     * of the App component
-     */
     const [notes, setNotes] = useState(
+        // Lazily initialize our `notes`
         () => JSON.parse(localStorage.getItem("notes")) || data)
 
     const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ""
     )
 
-    // save notes to local storage
     useEffect(() => {
         localStorage.setItem(
             "notes",
@@ -43,11 +37,21 @@ const App = () => {
     }
 
     function updateNote(text) {
-        setNotes(oldNotes => oldNotes.map(oldNote => {
-            return oldNote.id === currentNoteId
-                ? { ...oldNote, body: text }
-                : oldNote
-        }))
+        // Try to rearrange the most recently-modified note to be at the top
+        setNotes(oldNotes => {
+            const newNotes = []
+            for (const note of oldNotes) {
+                // if the id matches
+                if (note.id === currentNoteId) {
+                    // add the updated note to the new array
+                    newNotes.unshift({ ...note, body: text })
+                }
+                else {
+                    newNotes.push(note)
+                }
+            }
+            return newNotes
+        })
     }
 
     function findCurrentNote() {
