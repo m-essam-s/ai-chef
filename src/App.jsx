@@ -1,23 +1,37 @@
-import React from "react"
+import {
+    useState,
+    useEffect
+} from "react"
+
 import Sidebar from "./components/Sidebar"
 import Editor from "./components/Editor"
-// import { data } from "./data"
+import { data } from "./data"
 import Split from "react-split"
 import { nanoid } from "nanoid"
 import "./App.css"
 
-export default function App() {
+const App = () => {
 
-    const [notes, setNotes] = React.useState(
-        JSON.parse(localStorage.getItem("notes")) || []
-    )
-    const [currentNoteId, setCurrentNoteId] = React.useState(
+    // git notes from local storage
+    /**
+     * Lazily initialize our `notes` state so it doesn't
+     * reach into localStorage on every single re-render
+     * of the App component
+     */
+    const [notes, setNotes] = useState(
+        () => JSON.parse(localStorage.getItem("notes")) || data)
+
+    const [currentNoteId, setCurrentNoteId] = useState(
         (notes[0] && notes[0].id) || ""
     )
 
-    React.useEffect(() => {
-        localStorage.setItem("notes", JSON.stringify(notes))
-    }, [notes])
+    // save notes to local storage
+    useEffect(() => {
+        localStorage.setItem(
+            "notes",
+            JSON.stringify(notes)
+        ), []
+    })
 
     function createNewNote() {
         const newNote = {
@@ -82,3 +96,5 @@ export default function App() {
         </main>
     )
 }
+
+export default App

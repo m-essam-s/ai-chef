@@ -1,7 +1,7 @@
 import propsTypes from 'prop-types'
 
 const Sidebar = (props) => {
-    const noteElements = props.notes.map((note, index) => (
+    const noteElements = props.notes.map((note) => (
         <div key={note.id}>
             <div
 
@@ -9,7 +9,9 @@ const Sidebar = (props) => {
                     }`}
                 onClick={() => props.setCurrentNoteId(note.id)}
             >
-                <h4 className="text-snippet">Note {index + 1}</h4>
+                <h4 className="text-snippet">{
+                    note.body.split("\n")[0]
+                }</h4>
             </div>
         </div>
     ))
