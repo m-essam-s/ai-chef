@@ -17,8 +17,11 @@ const App = () => {
         () => JSON.parse(localStorage.getItem("notes")) || data)
 
     const [currentNoteId, setCurrentNoteId] = useState(
-        (notes[0] && notes[0].id) || ""
+        (notes[0]?.id) || ""
     )
+
+    const currentNote =
+        notes.find(note => note.id === currentNoteId) || notes[0]
 
     useEffect(() => {
         localStorage.setItem(
@@ -63,12 +66,6 @@ const App = () => {
         )
     }
 
-    function findCurrentNote() {
-        return notes.find(note => {
-            return note.id === currentNoteId
-        }) || notes[0]
-    }
-
     return (
         <main>
             {
@@ -81,7 +78,7 @@ const App = () => {
                     >
                         <Sidebar
                             notes={notes}
-                            currentNote={findCurrentNote()}
+                            currentNote={currentNote}
                             setCurrentNoteId={setCurrentNoteId}
                             newNote={createNewNote}
                             deleteNote={deleteNote}
@@ -90,7 +87,7 @@ const App = () => {
                             currentNoteId &&
                             notes.length > 0 &&
                             <Editor
-                                currentNote={findCurrentNote()}
+                                currentNote={currentNote}
                                 updateNote={updateNote}
                             />
                         }
