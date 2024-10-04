@@ -1,8 +1,4 @@
-import {
-    useState,
-    useEffect
-} from "react"
-
+import { useState, useEffect } from "react"
 import Sidebar from "./components/Sidebar"
 import Editor from "./components/Editor"
 import Split from "react-split"
@@ -20,6 +16,7 @@ const App = () => {
 
     const [notes, setNotes] = useState([])
     const [currentNoteId, setCurrentNoteId] = useState("")
+    const [tempNoteText, setTempNoteText] = useState("")
 
     const currentNote =
         notes.find(note => note.id === currentNoteId)
@@ -29,7 +26,6 @@ const App = () => {
 
     useEffect(() => {
         const unsubscribe = onSnapshot(notesCollection, function (snapshot) {
-            // Sync up our local notes array with the snapshot data
             const notesArr = snapshot.docs.map(doc => ({
                 ...doc.data(),
                 id: doc.id
@@ -43,7 +39,24 @@ const App = () => {
         if (!currentNoteId) {
             setCurrentNoteId(notes[0]?.id)
         }
-    }, [currentNoteId, notes])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [notes])
+
+    useEffect(() => {
+        if (currentNote) {
+            setTempNoteText(currentNote.body)
+        }
+    }, [currentNote])
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (tempNoteText !== currentNote.body) {
+                updateNote(tempNoteText)
+            }
+        }, 1000)
+        return () => clearTimeout(timeoutId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tempNoteText])
 
     async function createNewNote() {
         const newNote = {
@@ -57,16 +70,10 @@ const App = () => {
 
     async function updateNote(text) {
         const docRef = doc(db, "notes", currentNoteId)
-
         await setDoc(
             docRef,
-            {
-                body: text,
-                updatedAt: Date.now()
-            },
-            {
-                merge: true
-            }
+            { body: text, updatedAt: Date.now() },
+            { merge: true }
         )
     }
 
@@ -93,8 +100,8 @@ const App = () => {
                             deleteNote={deleteNote}
                         />
                         <Editor
-                            currentNote={currentNote}
-                            updateNote={updateNote}
+                            tempNoteText={tempNoteText}
+                            setTempNoteText={setTempNoteText}
                         />
                     </Split>
                     :
