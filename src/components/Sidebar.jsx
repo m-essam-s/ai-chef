@@ -14,7 +14,7 @@ const Sidebar = (props) => {
                 }</h4>
                 <button
                     className="delete-btn"
-                    onClick={(event) => props.deleteNote(event, note.id)}
+                    onClick={() => props.deleteNote(note.id)}
                 >
                     <i className="gg-trash trash-icon"></i>
                 </button>
