@@ -2,15 +2,15 @@ import List from "./List";
 const IngredientsList = (
     {
         ingredients,
-        toggleRecipeShown
+        getRecipe
     }: {
         ingredients: string[]
-        toggleRecipeShown: () => void
+        getRecipe: () => void
     }
 ) => {
     return (
         <section>
-            <h2 className=" text-[1.250rem] font-bold leading-[24px] mt-[23px]"
+            <h2 className="text-[1.250rem] font-bold leading-[24px] mt-[23px]"
             >Ingredients on hand:</h2>
             <List
                 items={ingredients}
@@ -21,7 +21,7 @@ const IngredientsList = (
                     <p className="text-[#6B7280] text-[0.875rem] leading-[20px]">Generate a recipe from your list of ingredients.</p>
                 </div>
                 <button
-                    onClick={toggleRecipeShown}
+                    onClick={getRecipe}
                     className="border-none rounded-[6px] bg-[#D17557] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] text-[#FAFAF8] px-[17px] py-[9px] font-inter text-[0.875rem] cursor-pointer"
                 >
                     Get a recipe</button>
